@@ -9,8 +9,11 @@ const price = () => {
         const inputValue = priceInput.value;
 
         if (!isNaN(inputValue) && inputValue !== "") {
-            addTaxDom.innerHTML = Math.floor(inputValue * 0.1);
-            profitDom.innerHTML = Math.floor(inputValue * 0.9);
+            const priceValue = Number(inputValue);
+            const tax = Math.floor(priceValue * 0.1);
+            const profit = priceValue - tax;
+            addTaxDom.innerHTML = tax;
+            profitDom.innerHTML = profit;
         } else {
             addTaxDom.innerHTML = "";
             profitDom.innerHTML = "";
