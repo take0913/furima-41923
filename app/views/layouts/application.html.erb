@@ -2,14 +2,19 @@
 <html>
   <head>
     <title>Furima41923</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <!-- 1) 公開鍵を埋め込む（これだけ１行） -->
+    <meta name="payjp-public-key" content="pk_test_e43b54e302f1513179ba3b41">
+
+    <!-- 2) v2 ライブラリを読み込む -->
+    <script src="https://js.pay.jp/v2/pay.js" defer data-turbo-track="reload"></script>
+
+    <!-- 3) CSS と importmap -->
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-
   <body>
     <%= yield %>
   </body>
