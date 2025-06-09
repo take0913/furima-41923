@@ -1,13 +1,10 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_item
+   before_action :redirect_if_invalid_purchase, only: [:index, :create]
 
   def index
-    if current_user == @item.user || @item.order.present?
-      redirect_to root_path
-    else
-      @order_address = OrderAddress.new
-    end
+     @order_address = OrderAddress.new
   end
 
   def create
@@ -17,7 +14,6 @@ class OrdersController < ApplicationController
         @order_address.save
         redirect_to root_path and return
       else
-        # pay_item で例外が起きたらここに来る
         render :index and return
       end
     else
@@ -31,6 +27,12 @@ class OrdersController < ApplicationController
     @item = Item.find(params[:item_id])
   end
 
+ def redirect_if_invalid_purchase
+  if current_user == @item.user || @item.order.present?
+    redirect_to root_path
+  end
+end
+
   def order_address_params
     params.require(:order_address).permit(
       :postal_code, :prefecture_id, :city, :address, :building, :phone_number
@@ -41,10 +43,9 @@ class OrdersController < ApplicationController
     )
   end
 
-  # true を返すと正常、false を返すと決済失敗として index に戻す
   def pay_item
     Payjp.api_key = ENV['PAYJP_SECRET_KEY']
-    # create! ではなく create を使います
+
     Payjp::Charge.create(
       amount:    @item.price,
       card:      order_address_params[:token],
@@ -52,7 +53,7 @@ class OrdersController < ApplicationController
     )
     true
   rescue Payjp::PayjpError => e
-    # Payjp::Error ではなく Payjp::PayjpError を rescue します
+
     flash.now[:alert] = "カード決済に失敗しました (#{e.message})"
     false
   end
