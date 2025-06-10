@@ -1,8 +1,4 @@
 const pay = () => {
-    console.log(
-        "✅ card.js が読み込まれました。公開鍵:",
-        document.querySelector('meta[name="payjp-public-key"]').content
-    );
     const form = document.getElementById("charge-form");
     if (!form) return;
 
@@ -10,7 +6,6 @@ const pay = () => {
     const publicKey = document.querySelector(
         'meta[name="payjp-public-key"]'
     ).content;
-    console.log("✅ card.js loaded, publicKey:", publicKey);
 
     // ② Payjp インスタンスを生成
     const payjp = Payjp(publicKey);
@@ -48,5 +43,5 @@ const pay = () => {
     });
 };
 
-// Turbo対応
 window.addEventListener("turbo:load", pay);
+window.addEventListener("turbo:render", pay);
