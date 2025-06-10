@@ -8,6 +8,11 @@ class Item < ApplicationRecord
   belongs_to :prefecture
   belongs_to :delivery_day
   has_one_attached :image
+  has_one :order, dependent: :destroy
+
+   def sold_out?
+    order.present?
+  end
 
   validates :image, presence: true
   validates :name, presence: true
