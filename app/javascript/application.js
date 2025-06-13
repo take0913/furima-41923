@@ -3,5 +3,3 @@ import "@hotwired/turbo-rails";
 import "controllers";
 import "item_price";
 import "./card.js";
-import Rails from "@rails/ujs";
-Rails.start();
